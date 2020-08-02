@@ -1,0 +1,118 @@
+var password='2001'
+const DELAY_TIME = 3000;     //缓冲时间
+var province = "省";        //引号内填入省
+var city = "市";            //引号内填入市
+var district = "县";        //引号内填入区
+let WIDTH = device.width;
+let HEIGHT = device.height;
+let swipe_x = WIDTH * 0.5;
+let swipe_start = HEIGHT * 0.9;
+let swipe_end = HEIGHT * 0.1;
+function Do(name)   //填一项，并等待
+{
+    while(!click(name));
+    sleep(DELAY_TIME);
+}
+
+
+//手机解锁，我手机型号是redmi k20有需要的朋友可以自己改一下代码，这块的解锁方案我做的不是很好，我用小米手环的蓝牙解锁的，原本有一个方案是可以点击密码或者滑动图案，但是效果不理想删除了。
+function jiesuo(){
+    if(!device.isScreenOn()){
+    device.wakeUpIfNeeded()
+    }
+    sleep(1000);
+    swipe(500, 10, 500, 1000, 2000);//下拉屏幕
+    sleep(1000);
+    sleep(500);click(178,233);//点击时间
+    sleep(1000);
+    home();
+}
+//这一块是我自己的需求，就是想点击什么文字就把内容改一下就可以了
+function xxsj() {
+    Do("我的大学");
+    
+    Do("信息收集");
+    
+    Do("每日一报");
+    
+    Do("请选择省或海外");
+    
+    while(!textContains(province).find().click());
+    sleep(1000);
+    Do("确认");
+
+    Do("请选择市或洲");
+    
+    while(!textContains(city).find().click());
+    sleep(1000);
+    Do("确认");
+
+    Do("请选择区/县或者国家");
+    
+    while(!textContains(district).find().click());
+    
+    sleep(1000);
+    Do("确认");
+    
+    Do("点击加载更多");
+    while(!textContains("小于37.3度").find()[0].parent().child(1).click());
+    sleep(1000);
+    while(!textContains("小于37.3度").find()[1].parent().child(1).click());
+    sleep(1000);
+    Do("健康，无症状");
+    var bottom_no = textContains("否").find();
+    var b_end = bottom_no.size() - 0;
+    for(var i = 0; i < b_end; i++)
+    {
+        bottom_no[i].parent().child(1).click();
+    }
+    sleep(1000);
+    while(!textContains("无需隔离").find()[0].parent().child(1).click());
+    sleep(1000);
+    while(!textContains("无此类情况").find()[0].parent().child(1).click());
+    sleep(1000);
+    while(!textContains("无此类情况").find()[1].parent().child(1).click());
+    sleep(1000);
+    gesture(50,[swipe_x, swipe_start], [swipe_x, swipe_end]);
+    gesture(50,[swipe_x, swipe_start], [swipe_x, swipe_end]);
+    gesture(50,[swipe_x, swipe_start], [swipe_x, swipe_end]);
+    gesture(50,[swipe_x, swipe_start], [swipe_x, swipe_end]);
+    Do("无以下特殊情况");
+    while(!textContains("是").find()[18].parent().child(1).click());
+    sleep(3000);
+    //Do("确认已认真查看，且填写信息无误");
+    Do("提交给辅导员");
+    Do("提交");
+    /*完成 */
+
+}
+function qiandao() {
+    Do("我的大学");
+    
+    Do("签到");
+    
+    Do("每日签到");
+    
+    Do("范围外签到");
+    
+    Do("继续签到");
+    
+    input("签到");
+    
+    Do("完成签到");
+    back();
+    sleep(1000);
+    back();
+    sleep(1000);
+    back();
+    sleep(1000);
+}
+jiesuo();
+sleep(1000);
+auto.waitFor();
+launchApp("今日校园");
+toast("3秒后开始签到");
+sleep(3000);
+qiandao();
+xxsj();
+home();
